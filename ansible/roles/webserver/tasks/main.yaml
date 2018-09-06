@@ -1,0 +1,17 @@
+- name: install nginx package
+  apt:
+    name: nginx
+    update_cache: yes
+
+- name: create web root directory 
+  file: 
+    state: directory
+    path: /var/www/example
+    owner: www-data
+
+- name: create nginx templates 
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"  
+    owner: "{{ item.owner }}" 
+  with_items: "{{ nginx_templates }}"

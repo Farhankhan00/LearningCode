@@ -1,0 +1,18 @@
+welcome_name: Hi Tally
+
+nginx_conf_path: /etc/nginx
+
+nginx_templates:
+  - name: index
+    src: index.html.j2
+    dest: /var/www/example/index.html
+    owner: www-data
+  - name: conf
+    src: nginx.conf
+    dest: "{{ nginx_conf_path }}/nginx.conf"
+    owner: root 
+  - name: block 
+    src: nginx-block.conf
+    dest: "{{ nginx_conf_path }}/sites-enabled/default"
+    owner: www-data
+
