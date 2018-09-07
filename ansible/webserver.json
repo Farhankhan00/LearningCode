@@ -1,0 +1,41 @@
+{
+    "builders": [
+      {
+        "type": "amazon-ebs",
+        "region": "us-east-1",
+        "ami_regions": ["us-east-1"],
+        "source_ami_filter": {
+          "filters": {
+            "name": "*ubuntu-bionic-18.04-amd64-server-*",
+            "architecture": "x86_64",
+            "virtualization-type": "hvm",
+            "root-device-type": "ebs"
+          },
+        "owners": ["099720109477"],
+        "most_recent": true
+        },
+        "ami_virtualization_type": "hvm",
+        "force_deregister": true,
+        "instance_type": "t2.micro",
+        "ssh_username": "ubuntu",
+        "ami_name": "webserver_{{timestamp}}",
+        "tags": {
+        "Name": "webserver",
+        "Curate": "True"
+        }
+    }
+    ],
+    "provisioners": [
+      {
+        "type": "ansible",
+        "playbook_file": "webserver.yaml",
+        "groups": ["webservers"],
+        "extra_arguments": [ 
+        "--extra-vars",
+        "amibuilder=true"
+        ],
+        "user": "ubuntu"
+      }
+    ]
+  }
+  
