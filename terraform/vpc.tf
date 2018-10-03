@@ -1,3 +1,4 @@
+#VPC - virtual private cloud (Isolated network in AWS)
 resource "aws_vpc" "main" {
   cidr_block = "172.16.0.0/16"
 
@@ -5,7 +6,7 @@ resource "aws_vpc" "main" {
     Name = "main"
   }
 }
-
+#its the users vpc link to the public internet!
 resource "aws_internet_gateway" "gw" {
   vpc_id = "${aws_vpc.main.id}"
 

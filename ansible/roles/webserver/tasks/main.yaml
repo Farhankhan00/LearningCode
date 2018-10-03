@@ -1,14 +1,14 @@
-- name: install nginx package
+- name: install nginx package 
   apt:
-    name: nginx
+    name: nginx 
     update_cache: yes
-
-- name: create web root directory 
+#creates dir to store website files
+- name: create web root directory  
   file: 
     state: directory
     path: /var/www/example
     owner: www-data
-
+#    
 - name: create nginx templates 
   template:
     src: "{{ item.src }}"

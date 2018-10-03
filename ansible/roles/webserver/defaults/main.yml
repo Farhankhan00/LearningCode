@@ -3,15 +3,15 @@ welcome_name: Aws Learning
 nginx_conf_path: /etc/nginx
 
 nginx_templates:
-  - name: index
+  - name: index #Main page of the website
     src: index.html.j2
     dest: /var/www/example/index.html
     owner: www-data
   - name: conf
-    src: nginx.conf
+    src: nginx.conf #configures ngnix service 
     dest: "{{ nginx_conf_path }}/nginx.conf"
     owner: root 
-  - name: block 
+  - name: block #its an individual application that ngnix serves
     src: nginx-block.conf
     dest: "{{ nginx_conf_path }}/sites-enabled/default"
     owner: www-data
