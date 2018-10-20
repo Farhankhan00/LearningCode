@@ -121,7 +121,7 @@ resource "aws_security_group" "elb" {
 
 resource "aws_launch_configuration" "webserver" {
   name_prefix   = "webserver_"
-  image_id      = "${data.aws_ami.webserver.id}"
+  image_id      = "ami-07917569e2c4a2b6a"
   instance_type = "t2.micro"
 
   security_groups = [
