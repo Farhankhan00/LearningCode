@@ -6,6 +6,7 @@ resource "aws_vpc" "main" {
     Name = "main"
   }
 }
+
 #its the users vpc link to the public internet!
 resource "aws_internet_gateway" "gw" {
   vpc_id = "${aws_vpc.main.id}"
