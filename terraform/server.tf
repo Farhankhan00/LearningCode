@@ -21,7 +21,7 @@ data "http" "icanhazip" {
 resource "aws_key_pair" "farhan" {
   key_name = "farhan"
 
-  ## REVISIT
+  ## USE YOUR NEW KEY
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCbFmBUZofPhyF3KYxFmk2rAaNzhgujgznQUMxW5wViKu3yxzYbly6jV/2akUW44uZ9oeSh1jP7y7/mErhhkboeEkF1OEtfq9gQcWx8RUc/OqbMLSU9X7cVrqykl8W9FbT3dzvk0m0JCmyeOTx1rpN48fsvMWg0I6fJ11q9ZvwoIlCPIpJVzYRDJoxNUbwX80VmlkluY04fdqDz3nJgnzf3Gcz60FJHEpUOJn1pQxKfiDy5lqUMRZ8/+nQe1VBwUkEAtfps5m9qdybvbbW2BAaxX/rqZNS6rCGV1h+wTgbE5X1SUAZVh57J5lAwczy/gFXhZW/hlxQkJkOuLNjbOMLH12dt4rNcrvF+haghJcRgwkbC14JohPJQUw7vIL+dDQ8Ph8+GRdDQngviY0V9OHXlZl7L3MJ75vUdWFHS49CaD+NklYcAJF86sRjJH5t0vzCmYUCiEPKweo7i/s9xUzItwReVr/6fnNcIVXb+3sEdGX6LhR94tiyWz5yfBYzvK4JNo0aZ2t/BXtgyvFShjnBdNo6S3DvUPYqy66RWPcmIsyB1CzcxV7C4coiqdGwePI3Jq4eO2i2G1WsMoKq8xMm6UOjLQ+VL1roNsAw00SASRIJTz4NEBTmg+Kdxf1Ja9YPPpfWlz/+cEuxLOsVFyw5Y1h/v8HWLtBBiYQdlygoucw=="
 }
 
