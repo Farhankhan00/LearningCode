@@ -9,6 +9,8 @@
       setup:
     
   roles:
+    - { role: swap }
     - { role: webserver }
     - { role: nodejs }
+
 

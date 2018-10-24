@@ -34,10 +34,10 @@ resource "aws_security_group" "webservers" {
     from_port = 80
     to_port   = 80
     protocol  = "tcp"
-    
+
     ## REVISIT
     security_groups = [
-      "${aws_security_group.elb.id}"
+      "${aws_security_group.elb.id}",
     ]
   }
 
@@ -52,6 +52,7 @@ resource "aws_security_group" "webservers" {
     Name = "webservers"
   }
 }
+
 resource "aws_security_group" "ssh" {
   name        = "ssh"
   description = "Allow all ssh traffic"
@@ -66,48 +67,7 @@ resource "aws_security_group" "ssh" {
     cidr_blocks = ["104.158.158.24/32"]
   }
 
-    egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags {
-    Name = "webservers"
-  }
-}
-resource "aws_route53_record" "www" {
-  zone_id = "${aws_route53_zone.farhan.zone_id}"
-  name    = "www.farhan.tastycidr.net"
-  type    = "CNAME"
-  ttl     = "300"
-  records = ["${aws_elb.webservers.dns_name}"]
-}
-
-resource "aws_security_group" "elb" {
-  name        = "elb"
-  description = "security group for application elb"
-  vpc_id      = "${aws_vpc.main.id}"
-
-  ingress {
-    from_port = 80
-    to_port   = 80
-    protocol  = "tcp"
-
-    ## REVISIT
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-    ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
-
-    ## REVISIT
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-    egress {
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -121,13 +81,12 @@ resource "aws_security_group" "elb" {
 
 resource "aws_launch_configuration" "webserver" {
   name_prefix   = "webserver_"
-  image_id      = "ami-07917569e2c4a2b6a"
+  image_id      = "${data.aws_ami.webserver.id}"
   instance_type = "t2.micro"
 
   security_groups = [
     "${aws_security_group.webservers.id}",
-    "${aws_security_group.ssh.id}"
-    
+    "${aws_security_group.ssh.id}",
   ]
 
   key_name = "${aws_key_pair.farhan.key_name}"
@@ -165,8 +124,8 @@ resource "aws_autoscaling_group" "webservers" {
     "${aws_subnet.application-c.id}",
   ]
 
-  load_balancers = [
-    "${aws_elb.webservers.name}",
+  target_group_arns = [
+    "${aws_lb_target_group.webserver.arn}",
   ]
 
   force_delete         = true
@@ -176,44 +135,5 @@ resource "aws_autoscaling_group" "webservers" {
     key                 = "Name"
     value               = "webserver"
     propagate_at_launch = true
-  }
-}
-
-resource "aws_elb" "webservers" {
-  name = "webservers"
-
-  subnets = [
-    "${aws_subnet.frontend-a.id}",
-    "${aws_subnet.frontend-b.id}",
-    "${aws_subnet.frontend-c.id}",
-  ]
-
-  security_groups = [
-    "${aws_security_group.elb.id}",
-  ]
-
-  listener {
-    instance_port     = 80
-    instance_protocol = "http"
-    lb_port           = 80
-    lb_protocol       = "http"
-  }
- listener {
-    instance_port     = 80
-    instance_protocol = "http"
-    lb_port           = 443
-    lb_protocol       = "https"
-    ssl_certificate_id = "${aws_acm_certificate.farhan.arn}"
-  }
-  health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 3
-    target              = "HTTP:80/"
-    interval            = 20
-  }
-
-  tags {
-    Name = "webservers"
   }
 }
