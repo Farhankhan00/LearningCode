@@ -1,7 +1,7 @@
 {
     "version": 3,
     "terraform_version": "0.11.8",
-    "serial": 69,
+    "serial": 68,
     "lineage": "8b8b19a8-927b-9120-9da9-7b4286b4242f",
     "modules": [
         {
@@ -117,22 +117,22 @@
                     "deposed": [],
                     "provider": "provider.aws"
                 },
-                "aws_db_instance.ghost": {
+                "aws_db_instance.default": {
                     "type": "aws_db_instance",
                     "depends_on": [
                         "aws_db_subnet_group.default",
                         "aws_security_group.ghost-rds"
                     ],
                     "primary": {
-                        "id": "terraform-20181026023450011400000001",
+                        "id": "terraform-20181026020525061400000001",
                         "attributes": {
-                            "address": "terraform-20181026023450011400000001.chcsnn9jjcec.us-east-1.rds.amazonaws.com",
+                            "address": "terraform-20181026020525061400000001.chcsnn9jjcec.us-east-1.rds.amazonaws.com",
                             "allocated_storage": "10",
-                            "arn": "arn:aws:rds:us-east-1:213722482034:db:terraform-20181026023450011400000001",
+                            "arn": "arn:aws:rds:us-east-1:213722482034:db:terraform-20181026020525061400000001",
                             "auto_minor_version_upgrade": "true",
-                            "availability_zone": "us-east-1b",
+                            "availability_zone": "us-east-1c",
                             "backup_retention_period": "0",
-                            "backup_window": "09:02-09:32",
+                            "backup_window": "07:47-08:17",
                             "ca_cert_identifier": "rds-ca-2015",
                             "copy_tags_to_snapshot": "false",
                             "db_subnet_group_name": "ghostdb_subnet_group",
@@ -140,21 +140,21 @@
                             "domain": "",
                             "domain_iam_role_name": "",
                             "enabled_cloudwatch_logs_exports.#": "0",
-                            "endpoint": "terraform-20181026023450011400000001.chcsnn9jjcec.us-east-1.rds.amazonaws.com:3306",
+                            "endpoint": "terraform-20181026020525061400000001.chcsnn9jjcec.us-east-1.rds.amazonaws.com:3306",
                             "engine": "mysql",
                             "engine_version": "5.7.23",
                             "hosted_zone_id": "Z2R2ITUGPM61AM",
                             "iam_database_authentication_enabled": "false",
-                            "id": "terraform-20181026023450011400000001",
-                            "identifier": "terraform-20181026023450011400000001",
+                            "id": "terraform-20181026020525061400000001",
+                            "identifier": "terraform-20181026020525061400000001",
                             "instance_class": "db.t2.micro",
                             "iops": "0",
                             "kms_key_id": "",
                             "license_model": "general-public-license",
-                            "maintenance_window": "thu:04:54-thu:05:24",
+                            "maintenance_window": "fri:07:04-fri:07:34",
                             "monitoring_interval": "0",
                             "multi_az": "false",
-                            "name": "ghost",
+                            "name": "db",
                             "option_group_name": "default:mysql-5-7",
                             "parameter_group_name": "default.mysql5.7",
                             "password": "ghostpass",
@@ -162,7 +162,7 @@
                             "publicly_accessible": "false",
                             "replicas.#": "0",
                             "replicate_source_db": "",
-                            "resource_id": "db-Y43IEGSJEPUNUEZQ3IRLNF6GE4",
+                            "resource_id": "db-ZYG4L7TN6Q7AICAI2LBU6EV4CI",
                             "security_group_names.#": "0",
                             "skip_final_snapshot": "false",
                             "status": "available",
@@ -563,33 +563,6 @@
                             "records.801860513": "_5b051f61e520d8a19cfba69d2f694cc7.tljzshvwok.acm-validations.aws.",
                             "set_identifier": "",
                             "ttl": "60",
-                            "type": "CNAME",
-                            "zone_id": "Z3OS55IE6F9M4E"
-                        },
-                        "meta": {
-                            "schema_version": "2"
-                        },
-                        "tainted": false
-                    },
-                    "deposed": [],
-                    "provider": "provider.aws"
-                },
-                "aws_route53_record.rds": {
-                    "type": "aws_route53_record",
-                    "depends_on": [
-                        "aws_db_instance.ghost",
-                        "aws_route53_zone.farhan"
-                    ],
-                    "primary": {
-                        "id": "Z3OS55IE6F9M4E_rds.farhan.specialpotato.net_CNAME",
-                        "attributes": {
-                            "allow_overwrite": "true",
-                            "fqdn": "rds.farhan.specialpotato.net",
-                            "id": "Z3OS55IE6F9M4E_rds.farhan.specialpotato.net_CNAME",
-                            "name": "rds.farhan.specialpotato.net",
-                            "records.#": "1",
-                            "records.2746433611": "terraform-20181026023450011400000001.chcsnn9jjcec.us-east-1.rds.amazonaws.com",
-                            "ttl": "300",
                             "type": "CNAME",
                             "zone_id": "Z3OS55IE6F9M4E"
                         },
@@ -1520,9 +1493,9 @@
                     "type": "aws_availability_zones",
                     "depends_on": [],
                     "primary": {
-                        "id": "2018-10-26 02:33:45.211723525 +0000 UTC",
+                        "id": "2018-10-26 02:30:02.778084754 +0000 UTC",
                         "attributes": {
-                            "id": "2018-10-26 02:33:45.211723525 +0000 UTC",
+                            "id": "2018-10-26 02:30:02.778084754 +0000 UTC",
                             "names.#": "6",
                             "names.0": "us-east-1a",
                             "names.1": "us-east-1b",
@@ -1541,10 +1514,10 @@
                     "type": "http",
                     "depends_on": [],
                     "primary": {
-                        "id": "2018-10-26 02:33:38.720488688 +0000 UTC",
+                        "id": "2018-10-26 02:22:57.475658279 +0000 UTC",
                         "attributes": {
                             "body": "104.158.158.8\n",
-                            "id": "2018-10-26 02:33:38.720488688 +0000 UTC",
+                            "id": "2018-10-26 02:22:57.475658279 +0000 UTC",
                             "url": "http://icanhazip.com"
                         },
                         "meta": {},

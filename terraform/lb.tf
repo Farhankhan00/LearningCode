@@ -61,15 +61,16 @@ resource "aws_lb_target_group" "webserver" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = "${aws_vpc.main.id}"
+
   health_check = {
-    interval = 15
-    path = "/"
-    port = "traffic-port"
-    protocol = "http"
-    timeout = 10
-    healthy_threshold = 2
+    interval            = 15
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 10
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    matcher = "200-299"
+    matcher             = "200-299"
   }
 }
 
@@ -91,16 +92,17 @@ resource "aws_lb_listener_rule" "redirect_http_to_https" {
 
   action {
     type = "redirect"
+
     redirect {
-      port = "443"
-      protocol = "HTTPS"
+      port        = "443"
+      protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
   }
 
   condition {
     field  = "host-header"
-    values = ["*.farhan.tastycidr.net"]
+    values = ["*.farhan.specialpotato.net"]
   }
 }
 
@@ -108,7 +110,7 @@ resource "aws_lb_listener" "http" {
   load_balancer_arn = "${aws_lb.webservers.arn}"
   port              = "80"
   protocol          = "HTTP"
-  
+
   default_action {
     type             = "forward"
     target_group_arn = "${aws_lb_target_group.webserver.arn}"
@@ -117,7 +119,7 @@ resource "aws_lb_listener" "http" {
 
 resource "aws_route53_record" "www" {
   zone_id = "${aws_route53_zone.farhan.zone_id}"
-  name    = "www.farhan.tastycidr.net"
+  name    = "www.farhan.specialpotato.net"
   type    = "CNAME"
   ttl     = "300"
   records = ["${aws_lb.webservers.dns_name}"]
@@ -125,7 +127,7 @@ resource "aws_route53_record" "www" {
 
 resource "aws_route53_record" "apex" {
   zone_id = "${aws_route53_zone.farhan.zone_id}"
-  name    = "farhan.tastycidr.net"
+  name    = "farhan.specialpotato.net"
   type    = "A"
 
   alias {
