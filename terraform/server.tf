@@ -22,7 +22,7 @@ resource "aws_key_pair" "farhan" {
   key_name = "farhan"
 
   ## REVISIT
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCbFmBUZofPhyF3KYxFmk2rAaNzhgujgznQUMxW5wViKu3yxzYbly6jV/2akUW44uZ9oeSh1jP7y7/mErhhkboeEkF1OEtfq9gQcWx8RUc/OqbMLSU9X7cVrqykl8W9FbT3dzvk0m0JCmyeOTx1rpN48fsvMWg0I6fJ11q9ZvwoIlCPIpJVzYRDJoxNUbwX80VmlkluY04fdqDz3nJgnzf3Gcz60FJHEpUOJn1pQxKfiDy5lqUMRZ8/+nQe1VBwUkEAtfps5m9qdybvbbW2BAaxX/rqZNS6rCGV1h+wTgbE5X1SUAZVh57J5lAwczy/gFXhZW/hlxQkJkOuLNjbOMLH12dt4rNcrvF+haghJcRgwkbC14JohPJQUw7vIL+dDQ8Ph8+GRdDQngviY0V9OHXlZl7L3MJ75vUdWFHS49CaD+NklYcAJF86sRjJH5t0vzCmYUCiEPKweo7i/s9xUzItwReVr/6fnNcIVXb+3sEdGX6LhR94tiyWz5yfBYzvK4JNo0aZ2t/BXtgyvFShjnBdNo6S3DvUPYqy66RWPcmIsyB1CzcxV7C4coiqdGwePI3Jq4eO2i2G1WsMoKq8xMm6UOjLQ+VL1roNsAw00SASRIJTz4NEBTmg+Kdxf1Ja9YPPpfWlz/+cEuxLOsVFyw5Y1h/v8HWLtBBiYQdlygoucw=="
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDR5OofU6s5jMWkcdUKtti0fw6QaofD4bw0abgAleqZ9XujDwhqM3S6B19QvekNx2OhF7XrCNgYoUYcA2iOFx01NGt5pWTQot4SokTeXgffl+GN3gD8hdsU9ObDlKLzppSCyvLb/somMa3fbJ+jlECduVYEb2uVbhpS0PODjrcoPPKIGnPFEz++/9ZF5/TOM+rB9Y1c8sn0uPSV+zJVQ7pYaP7l5FF3vCGiNpXgwkVE7J20QaWgS44w5RQfxw/f4nGJDpcfIEersweojCP2XOQsxvEghqZql1o051KL22FvBJbad3022dLCAa1Gc329vSU9PHgPseAtLvb+eU2f7fE/Xp1AxBKzsQUBsdbDp/euEGM2OQDCnvcmlE41uGBrkKxsBrjlnTNOku1/jKOWKdnOX9uBxFRlubr3XlXDjNYAqYwUpejmCqfiYOcOdA6udFuTOR0w7t+9vO7kqmwb0hmZr6hMJfNvjPH4ahZq4M5QQMfZJI7n3SHb4YPiTzOrVblZoqXhwyOVMJkcscUoJ+BuUcykl6DsmZYdj+D2bOTlsH0cxsyfY8XJI7jl15I+H6SnJ8cnOjMDqAMjM3rnAsIdo5LuhzqoRmZ+jugDUuaeJIhi07AsCrlZbk5UYYZGoHx/+VAADnqVKoLO96Bpe1t4erzV2fajG8CPpa7bEAVuzw== fkhan@Fkhan"
 }
 
 resource "aws_security_group" "webservers" {
@@ -64,7 +64,7 @@ resource "aws_security_group" "ssh" {
     protocol  = "tcp"
 
     ## REVISIT
-    cidr_blocks = ["104.158.158.24/32"]
+    cidr_blocks = ["104.158.158.8/32"]
   }
 
   egress {
@@ -77,7 +77,7 @@ resource "aws_security_group" "ssh" {
   tags {
     Name = "webservers"
   }
-}
+}main
 
 resource "aws_launch_configuration" "webserver" {
   name_prefix   = "webserver_"
@@ -114,9 +114,9 @@ data "aws_ami" "webserver" {
 
 resource "aws_autoscaling_group" "webservers" {
   name             = "webservers"
-  max_size         = 3
+  max_size         = 1
   min_size         = 1
-  desired_capacity = 3
+  desired_capacity = 1
 
   vpc_zone_identifier = [
     "${aws_subnet.application-a.id}",

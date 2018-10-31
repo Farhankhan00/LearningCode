@@ -32,9 +32,10 @@ resource "aws_route_table" "r" {
 data "aws_availability_zones" "available" {}
 
 resource "aws_subnet" "frontend-a" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.0.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.0.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "frontend-a"
@@ -42,9 +43,10 @@ resource "aws_subnet" "frontend-a" {
 }
 
 resource "aws_subnet" "frontend-b" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.1.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.1.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "frontend-b"
@@ -52,9 +54,10 @@ resource "aws_subnet" "frontend-b" {
 }
 
 resource "aws_subnet" "frontend-c" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.2.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.2.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[2]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "frontend-c"
@@ -62,9 +65,10 @@ resource "aws_subnet" "frontend-c" {
 }
 
 resource "aws_subnet" "application-a" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.3.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.3.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "application-a"
@@ -72,9 +76,10 @@ resource "aws_subnet" "application-a" {
 }
 
 resource "aws_subnet" "application-b" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.4.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.4.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "application-b"
@@ -82,9 +87,10 @@ resource "aws_subnet" "application-b" {
 }
 
 resource "aws_subnet" "application-c" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.5.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.5.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[2]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "application-c"
@@ -92,9 +98,10 @@ resource "aws_subnet" "application-c" {
 }
 
 resource "aws_subnet" "database-a" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.6.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.6.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "database-a"
@@ -102,9 +109,10 @@ resource "aws_subnet" "database-a" {
 }
 
 resource "aws_subnet" "database-b" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.7.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.7.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "database-b"
@@ -112,9 +120,10 @@ resource "aws_subnet" "database-b" {
 }
 
 resource "aws_subnet" "database-c" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.16.8.0/24"
-  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.16.8.0/24"
+  availability_zone       = "${data.aws_availability_zones.available.names[2]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "database-c"
