@@ -1,0 +1,21 @@
+- name: Ensure group {{ ghost_group }} exists
+  group:
+    name: "{{ ghost_group }}"
+    state: present
+
+- name: Add the user {{ ghost_user }} with a specific uid and a primary group of {{ ghost_group }}
+  user:
+    name: "{{ ghost_user }}"
+    uid: "{{ ghost_uid }}"
+    group: "{{ ghost_group }}"  
+
+- name: create ghost systemd unit
+  template: 
+    src: ghost.service.j2
+    dest: /etc/systemd/system/ghost.service
+    owner: root
+  notify:
+    - enable ghost
+    - start ghost
+    - restart ghost
+    

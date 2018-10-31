@@ -64,7 +64,7 @@ resource "aws_security_group" "ssh" {
     protocol  = "tcp"
 
     ## REVISIT
-    cidr_blocks = ["104.158.158.24/32"]
+    cidr_blocks = ["104.158.158.8/32"]
   }
 
   egress {
@@ -77,7 +77,7 @@ resource "aws_security_group" "ssh" {
   tags {
     Name = "webservers"
   }
-}
+}main
 
 resource "aws_launch_configuration" "webserver" {
   name_prefix   = "webserver_"
@@ -114,9 +114,9 @@ data "aws_ami" "webserver" {
 
 resource "aws_autoscaling_group" "webservers" {
   name             = "webservers"
-  max_size         = 3
+  max_size         = 1
   min_size         = 1
-  desired_capacity = 3
+  desired_capacity = 1
 
   vpc_zone_identifier = [
     "${aws_subnet.application-a.id}",

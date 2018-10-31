@@ -29,17 +29,18 @@ resource "aws_route53_record" "cert_validation" {
 
 resource "aws_route53_record" "SPNS" {
   provider = "aws.SP"
-  name       = "farhan.specialpotato.net"
-  type       = "NS"
-  zone_id    = "Z2YCIU8L9RIBGT"
-  records    = [
+  name     = "farhan.specialpotato.net"
+  type     = "NS"
+  zone_id  = "Z2YCIU8L9RIBGT"
+
+  records = [
     "${aws_route53_zone.farhan.name_servers.0}",
     "${aws_route53_zone.farhan.name_servers.1}",
     "${aws_route53_zone.farhan.name_servers.2}",
-    "${aws_route53_zone.farhan.name_servers.3}"
+    "${aws_route53_zone.farhan.name_servers.3}",
   ]
 
-  ttl        = 60
+  ttl = 60
 }
 
 resource "aws_acm_certificate_validation" "farhan" {
@@ -49,6 +50,7 @@ resource "aws_acm_certificate_validation" "farhan" {
 
 variable "SP_AK" {}
 variable "SP_SK" {}
+
 provider "aws" {
   alias      = "SP"
   access_key = "${var.SP_AK}"

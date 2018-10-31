@@ -13,7 +13,6 @@ resource "aws_db_subnet_group" "default" {
 }
 
 resource "aws_db_instance" "ghost" {
-  identifer = "ghost"
   allocated_storage    = 10
   storage_type         = "gp2"
   engine               = "mysql"
@@ -24,25 +23,27 @@ resource "aws_db_instance" "ghost" {
   password             = "ghostpass"
   parameter_group_name = "default.mysql5.7"
   db_subnet_group_name = "${aws_db_subnet_group.default.name}"
+
   vpc_security_group_ids = [
-    "${aws_security_group.ghost-rds.id}"
+    "${aws_security_group.ghost-rds.id}",
   ]
 }
 
 resource "aws_security_group" "ghost-rds" {
   vpc_id = "${aws_vpc.main.id}"
-  name      = "ghost-rds"
+  name   = "ghost-rds"
 
   tags {
-    Name    = "ghost-rds"
+    Name = "ghost-rds"
   }
 
   ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
+    from_port = 3306
+    to_port   = 3306
+    protocol  = "tcp"
+
     security_groups = [
-      "${aws_security_group.webservers.id}"
+      "${aws_security_group.webservers.id}",
     ]
   }
 
