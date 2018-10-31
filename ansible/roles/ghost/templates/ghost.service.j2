@@ -1,0 +1,15 @@
+[Unit]
+Description=ghosts
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/ghost
+ExecStart=/usr/bin/npm start --production 
+ExecStop=/usr/bin/npm stop --production 
+Restart=always
+SyslogIdentifier=ghost
+User={{ ghost_user }}
+Group={{ ghost_group }}
+
+[Install]
+WantedBy=multi-user.target  

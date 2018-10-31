@@ -12,5 +12,6 @@
     - { role: swap }
     - { role: webserver }
     - { role: nodejs }
+    - { role: ghost, tags: ["ghost"] }
 
 
