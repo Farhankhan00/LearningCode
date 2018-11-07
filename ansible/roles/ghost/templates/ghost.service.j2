@@ -3,7 +3,7 @@ Description=ghosts
 
 [Service]
 Type=simple
-WorkingDirectory=/opt/ghost
+WorkingDirectory={{ services_dir }}/ghost
 ExecStart=/usr/bin/npm start --production 
 ExecStop=/usr/bin/npm stop --production 
 Restart=always

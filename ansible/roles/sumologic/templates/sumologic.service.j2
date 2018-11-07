@@ -1,0 +1,14 @@
+[Unit]
+Description=SumoLogic
+
+[Service]
+Type=simple
+TimeoutSec=300
+ExecStart={{ sumo_install_path }}/collector console
+ExecStop={{ sumo_install_path }}/collector stop
+SyslogIdentifier=sumologic 
+User={{ sumo_source_path_owner }}
+Group={{ sumo_source_path_group }}
+
+[Install]
+WantedBy=multi-user.target  
