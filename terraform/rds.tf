@@ -12,6 +12,14 @@ resource "aws_db_subnet_group" "default" {
   }
 }
 
+data "aws_ssm_parameter" "ghost-user" {
+  name  = "/dev/ghost/rds/username"
+}
+
+data "aws_ssm_parameter" "ghost-password" {
+  name  = "/dev/ghost/rds/password"
+}
+
 resource "aws_db_instance" "ghost" {
   allocated_storage    = 10
   storage_type         = "gp2"
@@ -19,8 +27,8 @@ resource "aws_db_instance" "ghost" {
   engine_version       = "5.7"
   instance_class       = "db.t2.micro"
   name                 = "ghost"
-  username             = "ghost"
-  password             = "ghostpass"
+  username             = "${data.aws_ssm_parameter.ghost-user.value}"
+  password             = "${data.aws_ssm_parameter.ghost-password.value}"
   parameter_group_name = "default.mysql5.7"
   db_subnet_group_name = "${aws_db_subnet_group.default.name}"
 

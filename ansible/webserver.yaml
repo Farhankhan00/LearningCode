@@ -10,6 +10,7 @@
     
   roles:
     - { role: swap }
+    - { role: sumologic, tags: ["sumologic"] } 
     - { role: webserver }
     - { role: nodejs }
     - { role: ghost, tags: ["ghost"] }

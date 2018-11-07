@@ -77,7 +77,7 @@ resource "aws_security_group" "ssh" {
   tags {
     Name = "webservers"
   }
-}main
+}
 
 resource "aws_launch_configuration" "webserver" {
   name_prefix   = "webserver_"
