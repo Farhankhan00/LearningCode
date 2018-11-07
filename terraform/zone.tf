@@ -48,12 +48,17 @@ resource "aws_acm_certificate_validation" "farhan" {
   validation_record_fqdns = ["${aws_route53_record.cert_validation.fqdn}"]
 }
 
-variable "SP_AK" {}
-variable "SP_SK" {}
+data "aws_ssm_parameter" "sp-ak" {
+  name  = "specialpotato-r53-access-key"
+}
+
+data "aws_ssm_parameter" "sp-secret" {
+  name  = "specialpotato-r53-secret"
+}
 
 provider "aws" {
   alias      = "SP"
-  access_key = "${var.SP_AK}"
-  secret_key = "${var.SP_SK}"
+  access_key = "${data.aws_ssm_parameter.sp-ak.value}"
+  secret_key = "${data.aws_ssm_parameter.sp-secret.value}"
   region     = "us-east-1"
 }
