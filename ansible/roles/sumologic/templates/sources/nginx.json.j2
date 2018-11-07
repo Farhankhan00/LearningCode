@@ -4,13 +4,13 @@
     {
       "sourceType":"LocalFile",
       "name": "nginx access log",
-      "category": "{{ env_name }}/{{ service_name }}",
+      "category": "{{ env_name }}/{{ service_name }}/nginx/access",
       "multilineProcessingEnabled": "true",
       "pathExpression":"/var/log/nginx/access.log"
     },{
       "sourceType":"LocalFile",
       "name": "nginx error log",
-      "category": "{{ env_name }}/{{ service_name }}",
+      "category": "{{ env_name }}/{{ service_name }}/nginx/error",
       "multilineProcessingEnabled": "true",
       "pathExpression":"/var/log/nginx/error.log"
     }

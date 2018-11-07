@@ -17,3 +17,6 @@ sumo_sources:
   - name: nginx logs
     src: nginx.json.j2
     dest: nginx.json
+  - name: auth logs
+    src: authlog.json.j2
+    dest: authlog.json    

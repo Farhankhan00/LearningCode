@@ -1,0 +1,12 @@
+{
+  "api.version":"v1",
+  "sources":[
+    {
+      "sourceType":"LocalFile",
+      "name": "auth log",
+      "category": "{{ env_name }}/{{ service_name }}/authlog",
+      "multilineProcessingEnabled": "true",
+      "pathExpression":"/var/log/auth.log"
+    }
+  ]
+}
