@@ -3,13 +3,13 @@ Description=ghosts
 
 [Service]
 Type=simple
-WorkingDirectory={{ services_dir }}/ghost
-ExecStart=/usr/bin/npm start --production 
-ExecStop=/usr/bin/npm stop --production 
+Environment="NODE_ENV=production"
+ExecStart=/usr/bin/node /usr/local/bin/ghost run
+WorkingDirectory={{ services_dir }}
 Restart=always
 SyslogIdentifier=ghost
 User={{ ghost_user }}
 Group={{ ghost_group }}
 
 [Install]
-WantedBy=multi-user.target  
+WantedBy=multi-user.target

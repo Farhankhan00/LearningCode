@@ -3,27 +3,13 @@ ghost_group: ghost
 ghost_uid: 10001
 env_name: dev
 
-services_dir: /opt/services
+service_dir: /opt/services/ghost
 ghost_dns: "www.farhan.specialpotato.net"
 ghost_port: 2368
 
 GHOST_DB_HOST: rds.farhan.specialpotato.net
 GHOST_DB_PORT: 3306
-GHOST_DB_USER: "{{ lookup('aws_ssm', '/{{ env_name }}/ghost/rds/username, region='us-east-1' ) }}"
+GHOST_DB_USER: "{{ lookup('aws_ssm', '/{{ env_name }}/ghost/rds/username', region='us-east-1' ) }}"
 GHOST_DB_PW: "{{ lookup('aws_ssm', '/{{ env_name }}/ghost/rds/password', region='us-east-1' ) }}"
 GHOST_DB_DBNAME: ghost
-
-ghost_configs: 
-  - name: ghost config
-    src: ghost-config.js.j2
-    dest: "{{ services_dir }}/ghost/config.js"
-    owner: "{{ ghost_user }}"
-    group: "{{ ghost_group }}"
-    mode: u=rwx,g=r,o=r
-  - name: ghost service
-    src: ghost.service.j2
-    dest: "/etc/systemd/system/ghost.service"
-    owner: "root"
-    group: "root"
-    mode: u=rwx,g=r,o=r
     
