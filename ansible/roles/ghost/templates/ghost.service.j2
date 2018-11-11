@@ -4,8 +4,8 @@ Description=ghosts
 [Service]
 Type=simple
 Environment="NODE_ENV=production"
-ExecStart=/usr/bin/node /usr/local/bin/ghost run
-WorkingDirectory={{ services_dir }}
+ExecStart=/usr/bin/node index.js
+WorkingDirectory={{ service_dir }}
 Restart=always
 SyslogIdentifier=ghost
 User={{ ghost_user }}

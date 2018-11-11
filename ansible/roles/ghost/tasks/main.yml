@@ -21,11 +21,19 @@
     repo: https://github.com/TryGhost/Ghost.git
     dest: "{{ service_dir }}"
   become_user: "{{ ghost_user }}"
+  notify:
+    - enable ghost
+    - start ghost
+    - restart ghost
 
 - name: Install packages based on package.json.
   npm:
     path: "{{ service_dir }}"
   become_user: "{{ ghost_user }}"
+  notify:
+    - enable ghost
+    - start ghost
+    - restart ghost
 
 - name: Laydown ghost config
   template: 
@@ -33,3 +41,27 @@
     dest: "{{ service_dir }}/config.production.json" 
     owner: "{{ ghost_user }}"
     group: "{{ ghost_group }}" 
+  notify:
+    - enable ghost
+    - start ghost
+    - restart ghost
+
+- name: Laydown ghost systemd unit 
+  template: 
+    src: ghost.service.j2
+    dest: "/etc/systemd/system/ghost.service"
+    owner: "root"
+    group: "root"
+  notify:
+    - enable ghost
+    - start ghost
+    - restart ghost 
+
+- name: Laydown nginx block file 
+  template: 
+    src: nginx-block.j2
+    dest: "/etc/nginx/sites-enabled/default"
+    owner: "www-data"
+    group: "root"
+  notify:
+    - restart nginx 
