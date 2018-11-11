@@ -9,29 +9,59 @@
     uid: "{{ ghost_uid }}"
     group: "{{ ghost_group }}" 
 
-- name: create services directory  
+- name: create service directory  
   file: 
     state: directory
-    path: "{{ services_dir }}"
+    path: "{{ service_dir }}"
     owner: "{{ ghost_user }}"
     group: "{{ ghost_group }}" 
 
 - name: checkout ghost repo
   git:
-    repo: 'https://github.com/crielly/ghost.git'
-    dest: "{{ services_dir }}/ghost"
+    repo: https://github.com/TryGhost/Ghost.git
+    dest: "{{ service_dir }}"
   become_user: "{{ ghost_user }}"
-  
-- name: ghost config
-  template: 
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
-    mode: "{{ item.mode }}"
-  with_items: "{{ ghost_configs }}"
   notify:
     - enable ghost
     - start ghost
     - restart ghost
 
+- name: Install packages based on package.json.
+  npm:
+    path: "{{ service_dir }}"
+  become_user: "{{ ghost_user }}"
+  notify:
+    - enable ghost
+    - start ghost
+    - restart ghost
+
+- name: Laydown ghost config
+  template: 
+    src: ghost-config.js.j2
+    dest: "{{ service_dir }}/config.production.json" 
+    owner: "{{ ghost_user }}"
+    group: "{{ ghost_group }}" 
+  notify:
+    - enable ghost
+    - start ghost
+    - restart ghost
+
+- name: Laydown ghost systemd unit 
+  template: 
+    src: ghost.service.j2
+    dest: "/etc/systemd/system/ghost.service"
+    owner: "root"
+    group: "root"
+  notify:
+    - enable ghost
+    - start ghost
+    - restart ghost 
+
+- name: Laydown nginx block file 
+  template: 
+    src: nginx-block.j2
+    dest: "/etc/nginx/sites-enabled/default"
+    owner: "www-data"
+    group: "root"
+  notify:
+    - restart nginx 

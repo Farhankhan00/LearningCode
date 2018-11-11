@@ -1,0 +1,24 @@
+##### Example of a list of current users
+current_users:
+  - name: crielly
+    github_user: crielly
+    uid: 10003
+    shell: /bin/bash
+    groups: operations
+
+  - name: fkhan
+    github_user: Farhankhan00
+    uid: 10002
+    shell: /bin/bash
+    groups: operations
+
+base_svr_groups:
+  - name: developers
+    groupid: 30000
+    sudo: false
+  - name: operations
+    groupid: 31000
+    sudo: true
+  - name: qa
+    groupid: 32000
+    sudo: false

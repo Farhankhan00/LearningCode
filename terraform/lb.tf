@@ -87,6 +87,26 @@ resource "aws_lb_listener" "https" {
   }
 }
 
+resource "aws_lb_listener_rule" "redirect_apex_http_to_https" {
+  listener_arn = "${aws_lb_listener.http.arn}"
+
+  action {
+    type = "redirect"
+    redirect {
+      port = "443"
+      protocol = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+
+  condition {
+    field  = "host-header"
+    values = [
+      "farhan.specialpotato.net"
+    ]
+  }
+}
+
 resource "aws_lb_listener_rule" "redirect_http_to_https" {
   listener_arn = "${aws_lb_listener.http.arn}"
 
@@ -101,7 +121,9 @@ resource "aws_lb_listener_rule" "redirect_http_to_https" {
 
   condition {
     field  = "host-header"
-    values = ["*.farhan.specialpotato.net"]
+    values = [
+      "*.farhan.specialpotato.net"
+    ]
   }
 }
 

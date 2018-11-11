@@ -1,28 +1,29 @@
-var path = require('path'),
-    config;
-
-config = {
-    production: {
-        url: 'http://{{ ghost_dns }}',
-        mail: {},
-        database: {
-            client: 'mysql',
-            connection: {
-                host: '{{ GHOST_DB_HOST }}',
-                port: '{{ GHOST_DB_PORT }}',
-                user: '{{ GHOST_DB_USER }}',
-                password: '{{ GHOST_DB_PW }}',
-                database: '{{ GHOST_DB_DBNAME }}',
-                charset: 'utf8'
-            },
-            debug: false
-        },
-
-        server: {
-            host: '127.0.0.1',
-            port: '{{ ghost_port }}'
-        }
+{
+  "url": "http://{{ ghost_dns }}",
+  "server": {
+    "port": {{ ghost_port }},
+    "host": "127.0.0.1" 
+  },
+  "database": {
+    "client": "mysql",
+    "connection": {
+      "host": "{{ GHOST_DB_HOST }}",
+      "user": "{{ GHOST_DB_USER }}",
+      "password": "{{ GHOST_DB_PW }}",
+      "database": "{{ GHOST_DB_DBNAME }}"
     }
-};
-
-module.exports = config;
+  },
+  "mail": {
+    "transport": "Direct"
+  },
+  "logging": {
+    "transports": [
+      "file",
+      "stdout"
+    ]
+  },
+  "process": "systemd",
+  "paths": {
+    "contentPath": "{{ service_dir }}/content"
+  }
+}

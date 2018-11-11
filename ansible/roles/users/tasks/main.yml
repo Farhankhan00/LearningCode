@@ -1,0 +1,43 @@
+- name: Create Groups
+  group: 
+    name: "{{ item.name }}"
+    state: present 
+    gid: "{{ item.groupid }}"
+  with_items: "{{ base_svr_groups }}"
+
+- name: Create users
+  user: 
+    name: "{{ item.name }}"
+    state: present
+    uid: "{{ item.uid }}"
+    shell: "{{ item.shell }}"
+    groups: "{{ item.groups }}"
+    append: yes
+  with_items: "{{ current_users }}"
+  when: current_users is defined
+  
+- name: Allow specified groups to sudo
+  template: 
+    src: sudoers.j2
+    dest: /etc/sudoers.d/sudoers
+    validate: 'visudo -cf %s'
+    mode: 0440
+
+- name: create user ssh directories
+  file: 
+    state: directory
+    path: "/home/{{ item.name }}/.ssh"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+  with_items: "{{ current_users }}"
+
+- name: grab user ssh keys from github
+  uri:
+    url: "https://github.com/{{ item.github_user }}.keys"
+    return_content: yes
+    dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+    creates: "/home/{{ item.name }}/.ssh/authorized_keys"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+  with_items: "{{ current_users }}"
+  when: current_users is defined
