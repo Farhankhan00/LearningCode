@@ -1,0 +1,6 @@
+concourse_version: 4.2.2
+concourse_bin_url: "https://github.com/concourse/concourse/releases/download/v{{ concourse_version }}/concourse_linux_amd64"
+concourse_bin_path: /usr/bin/concourse
+
+concourse_user: concourse
+concourse_group: concourse

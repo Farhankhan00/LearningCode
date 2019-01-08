@@ -1,0 +1,1 @@
+{{ lookup('aws_ssm', '{{ ssmpath }}', decrypt=True, region='us-east-1' ) }}

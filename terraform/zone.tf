@@ -49,11 +49,11 @@ resource "aws_acm_certificate_validation" "farhan" {
 }
 
 data "aws_ssm_parameter" "sp-ak" {
-  name  = "specialpotato-r53-access-key"
+  name = "specialpotato-r53-access-key"
 }
 
 data "aws_ssm_parameter" "sp-secret" {
-  name  = "specialpotato-r53-secret"
+  name = "specialpotato-r53-secret"
 }
 
 provider "aws" {

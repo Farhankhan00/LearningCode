@@ -1,0 +1,20 @@
+[Unit]
+Description=concourse web frontend
+
+[Service]
+ExecStart={{ concourse_bin_path }} web \
+  --add-local-user fkhan:fkhan \
+  --main-team-local-user fkhan \
+  --session-signing-key session_signing_key \
+  --tsa-host-key tsa_host_key \
+  --tsa-authorized-keys authorized_worker_keys \
+  --external-url http://my-ci.example.com
+
+Type=simple
+Restart=always
+RestartSec=5
+StartLimitInterval=10
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target

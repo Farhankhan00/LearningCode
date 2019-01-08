@@ -1,0 +1,45 @@
+- name: Create Groups
+  group: 
+    name: "{{ concourse_group }}"
+    state: present 
+
+- name: Create users
+  user: 
+    name: "{{ concourse_user }}"
+    state: present
+    shell: /bin/false
+    groups: "{{ concourse_group }}"
+
+- name: Download concourse binary
+  get_url:
+    url: "{{ concourse_bin_url }}"
+    dest: "{{ concourse_bin_path }}"
+    mode: 0755
+
+- name: create concourse config directory
+  file: 
+    state: directory
+    path: /etc/concourse
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0600
+
+- name: fetch session signing key
+  template: 
+    src: key.j2
+    dest: /etc/concourse/session-signing.pem
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0400
+  vars: 
+    ssmpath: /concourse/session_signing_key-privatekey
+
+- name: fetch tsa host key
+  template: 
+    src: key.j2
+    dest: /etc/concourse/tsa-host-key.pem
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0400
+  vars: 
+    ssmpath: /concourse/tsa-host-privatekey
