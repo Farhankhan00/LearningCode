@@ -1,3 +1,6 @@
 ansible_python_interpreter: python3
 pkg_retry_num: 3
 pkg_retry_delay: 10 
+
+r53_apex_domain: farhan.specialpotato.net
+amibuilder: False

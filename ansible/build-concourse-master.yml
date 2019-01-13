@@ -3,14 +3,18 @@
   gather_facts: false
 
   pre_tasks:
-    # - name: install python 2
-    #   raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    - name: gather ec2 metadata facts
+      ec2_metadata_facts:
+      ignore_errors: true
+      tags:
+        - pullmode
     - name: gather facts
       setup:
     
   roles:
-    - { role: swap }
     - { role: users, tags: ["users"] }
     - { role: docker, tags: ["docker"]}
     - { role: concourse, tags: ["concourse"]}
     
+  vars: 
+    concourse_role: master 

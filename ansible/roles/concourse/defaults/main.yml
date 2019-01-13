@@ -1,6 +1,12 @@
 concourse_version: 4.2.2
 concourse_bin_url: "https://github.com/concourse/concourse/releases/download/v{{ concourse_version }}/concourse_linux_amd64"
 concourse_bin_path: /usr/bin/concourse
+concourse_cfg_path: /etc/concourse
 
 concourse_user: concourse
 concourse_group: concourse
+
+concourse_psql_user: concourse
+concourse_psql_password: "{{ lookup('aws_ssm', 'concourse-password', decrypt=True )}}"
+concourse_psql_dbname: concourse
+concourse_peer_port: 8080
