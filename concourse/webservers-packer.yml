@@ -1,0 +1,28 @@
+---
+jobs:
+- name: webservers-ami
+  public: true
+  plan:
+  - get: lcrepo
+  - task: packer-build
+    config: 
+      inputs:
+        - name: lcrepo
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: 
+          repository: fkhan2/packer 
+      run: 
+        path: sh
+        args: 
+        - -exc
+        - | 
+          cd lcrepo/ansible && packer build webserver.json
+      
+resources: 
+- name: lcrepo
+  type: git
+  source:
+    uri: https://github.com/Farhankhan00/LearningCode.git
+    branch: master

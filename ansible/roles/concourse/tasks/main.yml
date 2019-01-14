@@ -1,0 +1,106 @@
+- name: Create Groups
+  group: 
+    name: "{{ concourse_group }}"
+    state: present 
+  when: amibuilder 
+
+- name: Create users
+  user: 
+    name: "{{ concourse_user }}"
+    state: present
+    shell: /bin/false
+    groups: "{{ concourse_group }}"
+  when: amibuilder
+
+- name: Download concourse binary
+  get_url:
+    url: "{{ concourse_bin_url }}"
+    dest: "{{ concourse_bin_path }}"
+    mode: 0755
+  when: amibuilder
+
+- name: create concourse config directory
+  file: 
+    state: directory
+    path: "{{ concourse_cfg_path }}"
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0600
+  when: amibuilder  
+
+- name: fetch session signing key
+  template: 
+    src: key.j2
+    dest: "{{ concourse_cfg_path }}/session-signing-key"
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0400
+  vars: 
+    ssmpath: /concourse/session_signing_key-privatekey
+  when: concourse_role in ["master"] and not amibuilder
+
+- name: fetch tsa host key
+  template: 
+    src: key.j2
+    dest: "{{ concourse_cfg_path }}/tsa-host-key"
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0400
+  vars: 
+    ssmpath: /concourse/tsa-host-privatekey
+  when: concourse_role in ["master"] and not amibuilder
+
+- name: fetch worker pub key
+  template: 
+    src: key.j2
+    dest: "{{ concourse_cfg_path }}/worker-pub-key"
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0400
+  vars: 
+    ssmpath: /concourse/tsa-worker-publickey
+  when: concourse_role in ["master"] and not amibuilder
+
+- name: fetch tsa pub key
+  template: 
+    src: key.j2
+    dest: "{{ concourse_cfg_path }}/tsa-host-pub"
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0400
+  vars: 
+    ssmpath: /concourse/tsa-host-publickey
+  when: concourse_role in ["worker"] and not amibuilder
+
+- name: fetch worker private key
+  template: 
+    src: key.j2
+    dest: "{{ concourse_cfg_path }}/worker-private-key"
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0400
+  vars: 
+    ssmpath: /concourse/tsa-worker-privatekey
+  when: concourse_role in ["worker"] and not amibuilder
+
+- name: systemd unit
+  template: 
+    src: "concourse-{{ concourse_role }}.service.j2"
+    dest: "/etc/systemd/system/concourse-{{ concourse_role }}.service"
+    owner: root
+    group: root
+    mode: 0755
+  when: not amibuilder
+
+- name: trigger handlers for {{ concourse_role }}
+  debug:
+    msg: "running handlers for concourse-{{ concourse_role }}"
+  changed_when: true
+  when: not amibuilder
+  tags: 
+    - pullmode
+  notify: 
+    - "enable concourse-{{ concourse_role }}"
+    - "start concourse-{{ concourse_role }}"
+    - "restart concourse-{{ concourse_role }}"
+    

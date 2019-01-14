@@ -18,9 +18,9 @@
       "force_deregister": true,
       "instance_type": "t2.micro",
       "ssh_username": "ubuntu",
-      "ami_name": "jenkins_{{timestamp}}",
+      "ami_name": "concourse_master_{{timestamp}}",
       "tags": {
-      "Name": "jenkins",
+      "Name": "concourse_master",
       "Curate": "True"
       }
   }
@@ -28,8 +28,8 @@
   "provisioners": [
     {
       "type": "ansible",
-      "playbook_file": "jenkins-server.yml",
-      "groups": ["jenkins"],
+      "playbook_file": "build-concourse-master.yml",
+      "groups": ["concourse"],
       "extra_arguments": [ 
       "--extra-vars",
       "amibuilder=true"

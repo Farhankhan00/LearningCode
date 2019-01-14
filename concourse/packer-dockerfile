@@ -1,0 +1,3 @@
+FROM hashicorp/packer
+LABEL Author "farhan khan"
+RUN apk add --update ansible
