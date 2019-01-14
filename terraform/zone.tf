@@ -11,6 +11,9 @@ resource "aws_route53_zone" "farhan" {
 
 resource "aws_acm_certificate" "farhan" {
   domain_name       = "farhan.specialpotato.net"
+  subject_alternative_names = [
+    "*.farhan.specialpotato.net"
+  ]
   validation_method = "DNS"
 
   lifecycle {

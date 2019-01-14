@@ -4,3 +4,5 @@ pkg_retry_delay: 10
 
 r53_apex_domain: farhan.specialpotato.net
 amibuilder: False
+github_org: Moorcroft
+

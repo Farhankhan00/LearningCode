@@ -2,7 +2,7 @@ resource "aws_ssm_parameter" "concourse-password" {
   name      = "concourse-password"
   type      = "SecureString"
   value     = "${random_string.password.result}"
-  overwrite = false
+  overwrite = true
 }
 
 resource "random_string" "password" {
