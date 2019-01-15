@@ -28,6 +28,15 @@
     mode: 0600
   when: amibuilder  
 
+- name: create concourse work directory
+  file: 
+    state: directory
+    path: "{{ concourse_work_dir }}"
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0660
+  when: amibuilder 
+
 - name: fetch session signing key
   template: 
     src: key.j2
@@ -92,6 +101,22 @@
     mode: 0755
   when: not amibuilder
 
+- name: allow forwarding via ufw
+  ufw: 
+    direction: routed
+    default: allow
+  when: not amibuilder and concourse_role in ["worker"]
+  tags: 
+    - pullmode
+
+- name: allow all incoming traffic and enable ufw
+  ufw:
+    state: enabled
+    policy: allow
+  when: not amibuilder and concourse_role in ["worker"]
+  tags: 
+    - pullmode
+
 - name: trigger handlers for {{ concourse_role }}
   debug:
     msg: "running handlers for concourse-{{ concourse_role }}"
@@ -103,4 +128,3 @@
     - "enable concourse-{{ concourse_role }}"
     - "start concourse-{{ concourse_role }}"
     - "restart concourse-{{ concourse_role }}"
-    

@@ -1,0 +1,22 @@
+- name: install pip3
+  apt:
+    name: "{{ item }}"
+    update_cache : yes
+  register: result
+  until: result is success
+  retries: "{{ pkg_retry_num }}"
+  delay: "{{ pkg_retry_delay }}"
+  with_items: 
+    - python3-pip
+
+- name: install ansible pull dependcies  
+  pip:
+    name: "{{ item }}"
+  register: result
+  until: result is success
+  retries: "{{ pkg_retry_num }}"
+  delay: "{{ pkg_retry_delay }}"
+  with_items:
+    - awscli
+    - boto3
+    - ansible

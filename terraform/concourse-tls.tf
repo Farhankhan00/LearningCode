@@ -22,7 +22,7 @@ resource "aws_ssm_parameter" "tsa_host_privatekey" {
 resource "aws_ssm_parameter" "tsa_host_publickey" {
   name  = "/concourse/tsa-host-publickey"
   type  = "SecureString"
-  value = "${tls_private_key.tsa_host_key.public_key_pem}"
+  value = "${tls_private_key.tsa_host_key.public_key_openssh}"
 }
 
 resource "aws_ssm_parameter" "session_signing_key_privatekey" {
@@ -34,7 +34,7 @@ resource "aws_ssm_parameter" "session_signing_key_privatekey" {
 resource "aws_ssm_parameter" "session_signing_key_publickey" {
   name  = "/concourse/session_signing_key-publickey"
   type  = "SecureString"
-  value = "${tls_private_key.session_signing_key.public_key_pem}"
+  value = "${tls_private_key.session_signing_key.public_key_openssh}"
 }
 
 resource "aws_ssm_parameter" "tsa_worker_privatekey" {
@@ -46,5 +46,5 @@ resource "aws_ssm_parameter" "tsa_worker_privatekey" {
 resource "aws_ssm_parameter" "tsa_worker_publickey" {
   name  = "/concourse/tsa-worker-publickey"
   type  = "SecureString"
-  value = "${tls_private_key.tsa_worker_key.public_key_pem}"
+  value = "${tls_private_key.tsa_worker_key.public_key_openssh}"
 }
