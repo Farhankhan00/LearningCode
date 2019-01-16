@@ -102,7 +102,7 @@ resource "aws_elb" "concourse-master" {
 
   listener {
     instance_port     = 2222
-    instance_protocol = "tcp"/github-deploy-key-priv
+    instance_protocol = "tcp"
     lb_port           = 2222
     lb_protocol       = "tcp"
   }
@@ -153,7 +153,7 @@ resource "aws_elb" "concourse-master-internal" {
     "${aws_security_group.concourse-master-lb.id}",
   ]
 
-  listener {
+  listener {chmod 0400 /root/.ssh/id_rsa
     instance_port     = 2222
     instance_protocol = "tcp"
     lb_port           = 2222
