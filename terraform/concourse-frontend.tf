@@ -102,7 +102,7 @@ resource "aws_elb" "concourse-master" {
 
   listener {
     instance_port     = 2222
-    instance_protocol = "tcp"
+    instance_protocol = "tcp"/github-deploy-key-priv
     lb_port           = 2222
     lb_protocol       = "tcp"
   }
@@ -256,7 +256,7 @@ EOF
 data "template_file" "master-user-data" {
   template = "${file("concourse-master-userdata.tpl")}"
   vars = {
-    GIT_REPO = "https://github.com/Farhankhan00/LearningCode.git"
+    GIT_REPO = "git@github.com:Farhankhan00/LearningCode.git"
     GIT_BRANCH = "concourse_workers"
   }
 }
