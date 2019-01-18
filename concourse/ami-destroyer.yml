@@ -1,0 +1,19 @@
+---
+jobs:
+- name: ami-destroyer
+  public: false
+  plan:
+  - task: ami-destroyer
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: starseed/amidestroyer
+          tag: latest
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          cd /code && python3 amidestroyer.py tag:Curate --retain=((retain)) --regions=((regions))

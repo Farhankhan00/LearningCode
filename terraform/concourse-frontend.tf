@@ -253,13 +253,11 @@ resource "aws_iam_policy" "concourse-master" {
 EOF
 }
 
-data "aws_region" "current" {}
-
 data "template_file" "master-user-data" {
   template = "${file("concourse-master-userdata.tpl")}"
   vars = {
     GIT_REPO = "git@github.com:Farhankhan00/LearningCode.git"
-    GIT_BRANCH = "concourse_workers"
+    GIT_BRANCH = "master"
     REGION = "${data.aws_region.current.name}"
   }
 }
