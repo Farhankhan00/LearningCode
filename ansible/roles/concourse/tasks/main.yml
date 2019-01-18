@@ -47,6 +47,7 @@
   vars: 
     ssmpath: /concourse/session_signing_key-privatekey
   when: concourse_role in ["master"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: fetch tsa host key
   template: 
@@ -58,6 +59,7 @@
   vars: 
     ssmpath: /concourse/tsa-host-privatekey
   when: concourse_role in ["master"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: fetch worker pub key
   template: 
@@ -69,6 +71,7 @@
   vars: 
     ssmpath: /concourse/tsa-worker-publickey
   when: concourse_role in ["master"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: fetch tsa pub key
   template: 
@@ -80,6 +83,7 @@
   vars: 
     ssmpath: /concourse/tsa-host-publickey
   when: concourse_role in ["worker"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: fetch worker private key
   template: 
@@ -91,6 +95,7 @@
   vars: 
     ssmpath: /concourse/tsa-worker-privatekey
   when: concourse_role in ["worker"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: systemd unit
   template: 
@@ -100,7 +105,8 @@
     group: root
     mode: 0755
   when: not amibuilder
-
+  tags: ["pullmode"]
+  
 - name: allow forwarding via ufw
   ufw: 
     direction: routed

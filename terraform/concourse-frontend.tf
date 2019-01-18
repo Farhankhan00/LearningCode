@@ -153,7 +153,7 @@ resource "aws_elb" "concourse-master-internal" {
     "${aws_security_group.concourse-master-lb.id}",
   ]
 
-  listener {chmod 0400 /root/.ssh/id_rsa
+  listener {
     instance_port     = 2222
     instance_protocol = "tcp"
     lb_port           = 2222
@@ -253,11 +253,14 @@ resource "aws_iam_policy" "concourse-master" {
 EOF
 }
 
+data "aws_region" "current" {}
+
 data "template_file" "master-user-data" {
   template = "${file("concourse-master-userdata.tpl")}"
   vars = {
     GIT_REPO = "git@github.com:Farhankhan00/LearningCode.git"
     GIT_BRANCH = "concourse_workers"
+    REGION = "${data.aws_region.current.name}"
   }
 }
 
