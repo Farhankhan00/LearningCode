@@ -11,12 +11,13 @@
     - name: gather facts
       setup:
       tags: 
-        - pullmode  
+        - pullmode
     
   roles:
     - { role: users, tags: ["users"] }
+    - { role: docker, tags: ["docker"]}
     - { role: pullmode }
     - { role: concourse, tags: ["concourse"]}
     
   vars: 
-    concourse_role: master 
+    concourse_role: worker

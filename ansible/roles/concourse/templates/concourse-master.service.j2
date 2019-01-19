@@ -17,7 +17,11 @@ ExecStart={{ concourse_bin_path }} web \
   --peer-url http://{{ ansible_ec2_local_ipv4 }}:{{ concourse_peer_port }} \
   --github-client-id {{ concourse_github_client_id }} \
   --github-client-secret {{ concourse_github_client_secret }} \
-  --main-team-github-team {{ github_org }}:operations
+  --main-team-github-team {{ github_org }}:operations \
+  {%- raw %}
+  --aws-ssm-team-secret-template /concourse/team-secrets/{{.Team}}/{{.Secret}} \
+  --aws-ssm-pipeline-secret-template /concourse/pipeline-secrets/{{.Team}}/{{.Pipeline}}/{{.Secret}} \
+  {% endraw %}
   
 Type=simple
 Restart=always

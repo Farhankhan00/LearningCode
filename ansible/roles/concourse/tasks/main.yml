@@ -28,6 +28,15 @@
     mode: 0600
   when: amibuilder  
 
+- name: create concourse work directory
+  file: 
+    state: directory
+    path: "{{ concourse_work_dir }}"
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0660
+  when: amibuilder 
+
 - name: fetch session signing key
   template: 
     src: key.j2
@@ -38,6 +47,7 @@
   vars: 
     ssmpath: /concourse/session_signing_key-privatekey
   when: concourse_role in ["master"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: fetch tsa host key
   template: 
@@ -49,6 +59,7 @@
   vars: 
     ssmpath: /concourse/tsa-host-privatekey
   when: concourse_role in ["master"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: fetch worker pub key
   template: 
@@ -60,6 +71,7 @@
   vars: 
     ssmpath: /concourse/tsa-worker-publickey
   when: concourse_role in ["master"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: fetch tsa pub key
   template: 
@@ -71,6 +83,7 @@
   vars: 
     ssmpath: /concourse/tsa-host-publickey
   when: concourse_role in ["worker"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: fetch worker private key
   template: 
@@ -82,6 +95,7 @@
   vars: 
     ssmpath: /concourse/tsa-worker-privatekey
   when: concourse_role in ["worker"] and not amibuilder
+  tags: ["pullmode"]
 
 - name: systemd unit
   template: 
@@ -91,6 +105,23 @@
     group: root
     mode: 0755
   when: not amibuilder
+  tags: ["pullmode"]
+  
+- name: allow forwarding via ufw
+  ufw: 
+    direction: routed
+    default: allow
+  when: not amibuilder and concourse_role in ["worker"]
+  tags: 
+    - pullmode
+
+- name: allow all incoming traffic and enable ufw
+  ufw:
+    state: enabled
+    policy: allow
+  when: not amibuilder and concourse_role in ["worker"]
+  tags: 
+    - pullmode
 
 - name: trigger handlers for {{ concourse_role }}
   debug:
@@ -103,4 +134,3 @@
     - "enable concourse-{{ concourse_role }}"
     - "start concourse-{{ concourse_role }}"
     - "restart concourse-{{ concourse_role }}"
-    

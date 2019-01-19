@@ -1,0 +1,19 @@
+[Unit]
+Description=concourse worker
+
+[Service]
+ExecStart={{ concourse_bin_path }} worker \
+    --work-dir {{ concourse_work_dir }} \
+    --tsa-host {{ concourse_internal_url }}:2222 \
+    --tsa-public-key {{ concourse_cfg_path }}/tsa-host-pub \
+    --tsa-worker-private-key {{ concourse_cfg_path }}/worker-private-key \
+    --garden-dns-server 8.8.8.8 
+    
+Type=simple
+Restart=always
+RestartSec=5
+StartLimitInterval=10
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target
