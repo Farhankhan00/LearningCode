@@ -150,7 +150,8 @@ resource "aws_launch_configuration" "concourse-worker" {
 resource "aws_autoscaling_group" "concourse-worker" {
   name                 = "concourse-worker"
   max_size             = 2
-  min_size             = 0
+  min_size             = 1
+  desired_capacity     = 1
   force_delete         = true
   launch_configuration = "${aws_launch_configuration.concourse-worker.name}"
 
@@ -166,6 +167,7 @@ resource "aws_autoscaling_group" "concourse-worker" {
     ignore_changes = [
       "max_size",
       "min_size",
+      "desired_capacity"
     ]
   }
 

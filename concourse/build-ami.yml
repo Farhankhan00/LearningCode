@@ -4,6 +4,7 @@ jobs:
   public: false
   plan:
   - get: lcrepo
+    trigger: true
   - task: packer-build
     config: 
       inputs:
