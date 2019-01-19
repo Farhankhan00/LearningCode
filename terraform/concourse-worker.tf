@@ -46,6 +46,7 @@ resource "aws_security_group" "concourse-worker" {
 
 resource "aws_iam_role" "concourse-worker" {
   name = "concourse-worker"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -63,7 +64,7 @@ resource "aws_iam_role" "concourse-worker" {
 EOF
 
   tags = {
-      Name = "concourse-worker"
+    Name = "concourse-worker"
   }
 }
 
@@ -71,6 +72,7 @@ resource "aws_iam_instance_profile" "concourse-worker" {
   name = "concourse-worker"
   role = "${aws_iam_role.concourse-worker.name}"
 }
+
 resource "aws_iam_role_policy_attachment" "concourse-worker" {
   role       = "${aws_iam_role.concourse-worker.name}"
   policy_arn = "${aws_iam_policy.concourse-worker.arn}"
@@ -80,7 +82,8 @@ resource "aws_iam_policy" "concourse-worker" {
   name        = "concourse-worker"
   path        = "/"
   description = "concourse worker nodes"
-    policy = <<EOF
+
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -109,51 +112,60 @@ data "aws_ami" "concourse-worker" {
     values = ["hvm"]
   }
 
-  owners = ["self"] 
+  owners = ["self"]
 }
-
-
 
 data "template_file" "worker-user-data" {
   template = "${file("concourse-worker-userdata.tpl")}"
+
   vars = {
-    GIT_REPO = "git@github.com:Farhankhan00/LearningCode.git"
+    GIT_REPO   = "git@github.com:Farhankhan00/LearningCode.git"
     GIT_BRANCH = "master"
-    REGION = "${data.aws_region.current.name}"
+    REGION     = "${data.aws_region.current.name}"
   }
 }
 
 resource "aws_launch_configuration" "concourse-worker" {
-  name_prefix        = "concourse-worker_"
-  image_id      = "${data.aws_ami.concourse-worker.id}"
-  instance_type = "t2.micro"
+  name_prefix          = "concourse-worker_"
+  image_id             = "${data.aws_ami.concourse-worker.id}"
+  instance_type        = "t3.small"
   iam_instance_profile = "${aws_iam_instance_profile.concourse-worker.name}"
-  user_data = "${data.template_file.worker-user-data.rendered}"
+  user_data            = "${data.template_file.worker-user-data.rendered}"
+
+  root_block_device {
+    volume_type = "gp2"
+    volume_size = 20
+  }
+
   security_groups = [
     "${aws_security_group.concourse-worker.id}",
-    "${aws_security_group.ssh.id}"
+    "${aws_security_group.ssh.id}",
   ]
+
   lifecycle {
     create_before_destroy = true
   }
 }
 
 resource "aws_autoscaling_group" "concourse-worker" {
-  name                      = "concourse-worker"
-  max_size                  = 2
-  min_size                  = 0
-  force_delete              = true
-  launch_configuration      = "${aws_launch_configuration.concourse-worker.name}"
-  vpc_zone_identifier       = [
+  name                 = "concourse-worker"
+  max_size             = 2
+  min_size             = 0
+  force_delete         = true
+  launch_configuration = "${aws_launch_configuration.concourse-worker.name}"
+
+  vpc_zone_identifier = [
     "${aws_subnet.frontend-a.id}",
     "${aws_subnet.frontend-b.id}",
     "${aws_subnet.frontend-c.id}",
   ]
-  
+
   lifecycle {
     create_before_destroy = true
+
     ignore_changes = [
-      "max_size", "min_size"
+      "max_size",
+      "min_size",
     ]
   }
 
@@ -163,4 +175,3 @@ resource "aws_autoscaling_group" "concourse-worker" {
     propagate_at_launch = true
   }
 }
-
