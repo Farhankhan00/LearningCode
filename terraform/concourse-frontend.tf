@@ -8,40 +8,42 @@ resource "aws_security_group" "concourse-master" {
 }
 
 resource "aws_security_group_rule" "master-lb-to-master-2222" {
-  type = "ingress"
-  from_port = 2222
-  to_port = 2222
-  protocol = "tcp"
+  type                     = "ingress"
+  from_port                = 2222
+  to_port                  = 2222
+  protocol                 = "tcp"
   source_security_group_id = "${aws_security_group.concourse-master-lb.id}"
-  security_group_id = "${aws_security_group.concourse-master.id}"
+  security_group_id        = "${aws_security_group.concourse-master.id}"
 }
 
 resource "aws_security_group_rule" "master-lb-to-master-8080" {
-  type = "ingress"
-  from_port = 8080
-  to_port = 8080
-  protocol = "tcp"
+  type                     = "ingress"
+  from_port                = 8080
+  to_port                  = 8080
+  protocol                 = "tcp"
   source_security_group_id = "${aws_security_group.concourse-master-lb.id}"
-  security_group_id = "${aws_security_group.concourse-master.id}"
+  security_group_id        = "${aws_security_group.concourse-master.id}"
 }
 
 resource "aws_security_group_rule" "master-to-master-ephemeral" {
-  type = "ingress"
-  from_port = 1024
-  to_port = 65535
-  protocol = "tcp"
+  type                     = "ingress"
+  from_port                = 1024
+  to_port                  = 65535
+  protocol                 = "tcp"
   source_security_group_id = "${aws_security_group.concourse-master.id}"
-  security_group_id = "${aws_security_group.concourse-master.id}"
+  security_group_id        = "${aws_security_group.concourse-master.id}"
 }
 
 resource "aws_security_group_rule" "master-egress" {
-  type = "egress"
+  type      = "egress"
   from_port = 0
-  to_port = 0
-  protocol = "-1"
+  to_port   = 0
+  protocol  = "-1"
+
   cidr_blocks = [
-    "0.0.0.0/0"
+    "0.0.0.0/0",
   ]
+
   security_group_id = "${aws_security_group.concourse-master.id}"
 }
 
@@ -61,11 +63,12 @@ resource "aws_security_group" "concourse-master-lb" {
   }
 
   ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+
     security_groups = [
-      "${aws_security_group.concourse-worker.id}"
+      "${aws_security_group.concourse-worker.id}",
     ]
   }
 
@@ -132,6 +135,7 @@ resource "aws_route53_record" "external" {
   zone_id = "${aws_route53_zone.farhan.zone_id}"
   name    = "concourse.farhan.specialpotato.net"
   type    = "A"
+
   alias {
     name                   = "${aws_elb.concourse-master.dns_name}"
     zone_id                = "${aws_elb.concourse-master.zone_id}"
@@ -140,7 +144,7 @@ resource "aws_route53_record" "external" {
 }
 
 resource "aws_elb" "concourse-master-internal" {
-  name = "concourse-master-internal"
+  name     = "concourse-master-internal"
   internal = true
 
   subnets = [
@@ -185,6 +189,7 @@ resource "aws_route53_record" "internal" {
   zone_id = "${aws_route53_zone.farhan.zone_id}"
   name    = "concourse-internal.farhan.specialpotato.net"
   type    = "A"
+
   alias {
     name                   = "${aws_elb.concourse-master-internal.dns_name}"
     zone_id                = "${aws_elb.concourse-master-internal.zone_id}"
@@ -194,6 +199,7 @@ resource "aws_route53_record" "internal" {
 
 resource "aws_iam_role" "concourse-master" {
   name = "concourse-master"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -211,7 +217,7 @@ resource "aws_iam_role" "concourse-master" {
 EOF
 
   tags = {
-      Name = "concourse-master"
+    Name = "concourse-master"
   }
 }
 
@@ -219,6 +225,7 @@ resource "aws_iam_instance_profile" "concourse-master" {
   name = "concourse-master"
   role = "${aws_iam_role.concourse-master.name}"
 }
+
 resource "aws_iam_role_policy_attachment" "concourse-master" {
   role       = "${aws_iam_role.concourse-master.name}"
   policy_arn = "${aws_iam_policy.concourse-master.arn}"
@@ -228,7 +235,8 @@ resource "aws_iam_policy" "concourse-master" {
   name        = "concourse-master"
   path        = "/"
   description = "concourse master nodes"
-    policy = <<EOF
+
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -255,10 +263,11 @@ EOF
 
 data "template_file" "master-user-data" {
   template = "${file("concourse-master-userdata.tpl")}"
+
   vars = {
-    GIT_REPO = "git@github.com:Farhankhan00/LearningCode.git"
+    GIT_REPO   = "git@github.com:Farhankhan00/LearningCode.git"
     GIT_BRANCH = "master"
-    REGION = "${data.aws_region.current.name}"
+    REGION     = "${data.aws_region.current.name}"
   }
 }
 
@@ -275,45 +284,50 @@ data "aws_ami" "concourse-master" {
     values = ["hvm"]
   }
 
-  owners = ["self"] 
+  owners = ["self"]
 }
 
 resource "aws_launch_configuration" "concourse-master" {
-  name_prefix        = "concourse-master_"
-  image_id      = "${data.aws_ami.concourse-master.id}"
-  instance_type = "t2.micro"
+  name_prefix          = "concourse-master_"
+  image_id             = "${data.aws_ami.concourse-master.id}"
+  instance_type        = "t2.micro"
   iam_instance_profile = "${aws_iam_instance_profile.concourse-master.name}"
-  user_data = "${data.template_file.master-user-data.rendered}"
+  user_data            = "${data.template_file.master-user-data.rendered}"
+
   security_groups = [
     "${aws_security_group.concourse-master.id}",
-    "${aws_security_group.ssh.id}"
+    "${aws_security_group.ssh.id}",
   ]
+
   lifecycle {
     create_before_destroy = true
   }
 }
 
 resource "aws_autoscaling_group" "concourse-master" {
-  name                      = "concourse-master"
-  max_size                  = 2
-  min_size                  = 0
-  force_delete              = true
-  launch_configuration      = "${aws_launch_configuration.concourse-master.name}"
-  vpc_zone_identifier       = [
+  name                 = "concourse-master"
+  max_size             = 2
+  min_size             = 0
+  force_delete         = true
+  launch_configuration = "${aws_launch_configuration.concourse-master.name}"
+
+  vpc_zone_identifier = [
     "${aws_subnet.frontend-a.id}",
     "${aws_subnet.frontend-b.id}",
     "${aws_subnet.frontend-c.id}",
   ]
-  
+
   load_balancers = [
     "${aws_elb.concourse-master.name}",
-    "${aws_elb.concourse-master-internal.name}"
-  ]  
+    "${aws_elb.concourse-master-internal.name}",
+  ]
 
   lifecycle {
     create_before_destroy = true
+
     ignore_changes = [
-      "max_size", "min_size"
+      "max_size",
+      "min_size",
     ]
   }
 
