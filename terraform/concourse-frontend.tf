@@ -307,7 +307,8 @@ resource "aws_launch_configuration" "concourse-master" {
 resource "aws_autoscaling_group" "concourse-master" {
   name                 = "concourse-master"
   max_size             = 2
-  min_size             = 0
+  min_size             = 2
+  desired_capacity     = 2
   force_delete         = true
   launch_configuration = "${aws_launch_configuration.concourse-master.name}"
 
@@ -328,6 +329,7 @@ resource "aws_autoscaling_group" "concourse-master" {
     ignore_changes = [
       "max_size",
       "min_size",
+      "desired_capacity"
     ]
   }
 

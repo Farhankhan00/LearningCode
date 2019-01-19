@@ -3,6 +3,8 @@ jobs:
 - name: ami-destroyer
   public: false
   plan:
+  - get: my-timer
+    trigger: true
   - task: ami-destroyer
     config:
       platform: linux
@@ -17,3 +19,8 @@ jobs:
         - -exc
         - |
           cd /code && python3 amidestroyer.py tag:Curate --retain=((retain)) --regions=((regions))
+resources:
+- name: my-timer
+  type: time
+  source:
+    interval: 24h
