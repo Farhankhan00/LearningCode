@@ -18,6 +18,7 @@ ExecStart={{ concourse_bin_path }} web \
   --github-client-id {{ concourse_github_client_id }} \
   --github-client-secret {{ concourse_github_client_secret }} \
   --main-team-github-team {{ github_org }}:operations \
+  --aws-ssm-region {{ ansible_ec2_placement_region }} \
   {%- raw %}
   --aws-ssm-team-secret-template /concourse/team-secrets/{{.Team}}/{{.Secret}} \
   --aws-ssm-pipeline-secret-template /concourse/pipeline-secrets/{{.Team}}/{{.Pipeline}}/{{.Secret}} \
